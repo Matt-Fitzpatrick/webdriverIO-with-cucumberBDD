@@ -1,7 +1,10 @@
 import Page from './page'
 
 class ItemPage extends Page {
-  open (path = 'microsoft-xbox-one-s-1tb-all-digital-edition-console-disc-free-gaming-white') {
+  get pictureUrl () { return $('//*[contains(@class, "picture")]/img').isExisting() ? $('//*[contains(@class, "picture")]/img').getAttribute('src') : null; }
+
+  open (title = 'Microsoft - Xbox One S 1TB All-Digital Edition Console (Disc-free Gaming) - White') {
+    const path = title.replace(/'/g, '').replace(/\W+/g, '-').toLowerCase();
     return super.open(path);
   }
   addToCart (itemNumber = 1) {

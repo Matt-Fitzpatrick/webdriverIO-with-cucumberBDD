@@ -1,4 +1,7 @@
 import { Given } from 'cucumber';
+import AdminCreatePage from '../pageobjects/training-admincreatepage.page';
+import AdminEditPage from '../pageobjects/training-admineditpage.page';
+import AdminSeoNamesPage from '../pageobjects/training-adminseonamespage.page';
 import HomePage from '../pageobjects/training-homepage.page';
 import LoginPage from '../pageobjects/training-loginpage.page';
 import LogoutPage from '../pageobjects/training-logoutpage.page';
@@ -33,6 +36,10 @@ Given('I am logged in', () => {
   LoginPage.open().login();
 });
 
+Given('I am logged in as an administrator', () => {
+  LoginPage.open().login('matthew.fitzpatrick@auticon.us');
+});
+
 Given('my wishlist is empty', () => {
   WishlistPage.open().empty();
 });
@@ -49,4 +56,25 @@ Given('my shopping cart is empty', () => {
 Given(/^my shopping cart has (\d+) items?$/, (itemNumber) => {
   CartPage.open().empty();
   ItemPage.open().addToCart(itemNumber);
+});
+
+Given(/^the (.*) (?:button|checkbox|input) contains "([^"]*)"$/, (input, text) => {
+  RegisterPage.inputNamed(input).setValue(text);
+});
+
+Given('I have deleted the previous test product', () => {
+  if(AdminEditPage.open("Don't Drop the Controller")) {
+    AdminEditPage.delete();
+  }
+  if(AdminSeoNamesPage.open().searchResults("Don't Drop the Controller")) {
+    AdminSeoNamesPage.delete("Don't Drop the Controller");
+  }
+});
+
+Given('I have created a new test product', () => {
+  AdminCreatePage.open().fillForm().saveAndContinueEdit();
+});
+
+Given('I have uploaded a picture', () => {
+  AdminEditPage.addPicture().save();
 });

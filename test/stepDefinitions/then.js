@@ -1,8 +1,12 @@
 import { Then } from 'cucumber';
+import AdminCreatePage from '../pageobjects/training-admincreatepage.page';
+import AdminEditPage from '../pageobjects/training-admineditpage.page';
 import HomePage from '../pageobjects/training-homepage.page';
+import ItemPage from '../pageobjects/training-itempage.page';
 import RegisterPage from '../pageobjects/training-registerpage.page';
 
 import mLoginPage from '../pageobjects/login.page';
+import trainingItempagePage from '../pageobjects/training-itempage.page';
 Then('I should see the logout link', () => {
   mLoginPage.isLogoutShowing().should.be.true;
 });
@@ -60,13 +64,29 @@ Then(/^I should see the validation error message "([^"]*)"$/, (text) => {
 });
 
 Then(/^I should see the (.*) (?:button|checkbox|input) has the label "([^"]*)"$/, (input, text) => {
-  expect(RegisterPage.inputNamed(input).labelText).to.equal(text);
+  expect(RegisterPage.labelFor(input)).to.equal(text);
 });
 
 Then(/^I should see the (.*) (?:button|checkbox|input) is required$/, (input) => {
-  expect(RegisterPage.inputNamed(input).isRequired).to.be.true;
+  RegisterPage.requiring(input).should.be.true;
 });
 
 Then(/^I should not see the (.*) (?:button|checkbox|input) is required$/, (input) => {
-  expect(RegisterPage.inputNamed(input).isRequired).to.be.false;
+  RegisterPage.requiring(input).should.be.false;
+});
+
+Then('I should see the product creation form', () => {
+  expect(AdminCreatePage.formHeadingText).to.match(/^Add a new product/);
+});
+
+Then('I should see the product editing form', () => {
+  expect(AdminEditPage.formHeadingText).to.match(/^Edit product details/);
+});
+
+Then('I should not see the No Image placeholder', () => {
+  expect(ItemPage.pictureUrl).to.not.match(/default-image/);
+});
+
+Then('I should see the picture I uploaded', () => {
+  expect(ItemPage.pictureUrl).to.match(/dont-drop-the-controller/);
 });
