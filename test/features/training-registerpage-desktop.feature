@@ -84,6 +84,18 @@ Feature: Registration page in desktop layout
         And I should not see the Company Name input is required
         And I should not see the Newsletter input is required
 
+    Scenario: First name validation
+        Given I am on the Auticon Training registration page
+        And the First Name input contains "test"
+        When I set the First Name input to ""
+        Then I should see the validation error message "First name is required."
+
+    Scenario: Last name validation
+        Given I am on the Auticon Training registration page
+        And the Last Name input contains "test"
+        When I clear the Last Name input
+        Then I should see the validation error message "Last name is required."
+
     Scenario: Try to register without required inputs
         Given I am on the Auticon Training registration page
         When I register with first name "", last name "", email "", and password ""
